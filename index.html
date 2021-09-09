@@ -1,266 +1,152 @@
-<h1><a href="#het直连clife云集成文档" name="het直连clife云集成文档"></a>HeT直连Clife云集成文档</h1>
-<p>主要功能：设备认证、设备数据上传、数据下发；<br/>使用环境：Android，ios，macos，linux</p>
-<h2><a href="#项目介绍" name="项目介绍"></a>项目介绍</h2>
-<p>{**以下是码云平台说明，您可以替换为您的项目简介**<br/>c++ application for H&amp;T,contain tcp/udp/multicast,http client,http server,protocol,clife open sdk.}</p>
-<h2><a href="#xcode配置使用" name="xcode配置使用"></a>xcode配置使用</h2>
-<ol>
-  <li>Build Settings-&gt;Preprocessor Macros-&gt;Debug 新增ASIO_STANDALONE=1</li>
-  <li>Build Settings-&gt;Header Search Paths-&gt;Debug 新增asio/include库路径</li>
-</ol>
-<table>
-  <thead>
-    <tr>
-      <th>版本 </th>
-      <th>更改内容 </th>
-      <th>更改日期 </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>V1.0.0 </td>
-      <td>初版 </td>
-      <td>2016-06-06 </td>
-    </tr>
-    <tr>
-      <td>V1.0.1 </td>
-      <td>参数改为javaBean对象，添加历史数据上传 </td>
-      <td>2016-06-14 </td>
-    </tr>
-    <tr>
-      <td>V1.0.2 </td>
-      <td>1.使用底层通讯使用C++；2.新增xml协议解析 </td>
-      <td>2019-02-02 </td>
-    </tr>
-    <tr>
-      <td>V1.0.3 </td>
-      <td>1.增加故障数据上传 </td>
-      <td>2020-04-16 </td>
-    </tr>
-  </tbody>
-</table>
-<h2><a href="#android端配置使用" name="android端配置使用"></a>Android端配置使用</h2>
-<p>Android gralde依赖</p>
-<p>修改Android工程的root目录的build.gradle，新增maven地址：</p>
-<pre><code>    maven {url &#39;https://oss.sonatype.org/content/repositories/snapshots/&#39;}
-</code></pre>
-<p>修改app工程目录的build.gradle,新增sdk依赖</p>
-<pre><code>    compile &#39;com.github.szhittech:hetopensdk:0.0.2-SNAPSHOT&#39;
-</code></pre>
-<h3><a href="#通讯service初始化-" name="通讯service初始化-"></a>通讯Service初始化：</h3>
-<p>功能：与HeT云端通讯，上传设备控制数据、运行数据、维护心跳以及云端下发控制数据；<br/>初始化步骤：</p>
-<h4><a href="#1-设备参数初始化-" name="1-设备参数初始化-"></a>1、 设备参数初始化：</h4>
-<pre><code>    //1.新建设备参数类；
-    DevDataBean devDataBean = new DevDataBean();
-    //2.设置设备配置数据字节长度
-    devDataBean.setConfigData(new byte[80]);
-    //3.设置设备编码信息
-    devDataBean.setDeviceCode(&quot;0000C42500460101&quot;);
-    //4.设置设备DeviceKey信息
-    devDataBean.setDeviceKey(&quot;fcb48dda4bbc40db990ebe3f3d3080cd&quot;);
-    //5.设置设备Mac地址
-    devDataBean.setDeviceMac(&quot;aabbccaaccc1&quot;);
-</code></pre>
-<blockquote>
-  <p>以上参数“**设备Mac地址**”和“**设备硬件配置信息**”需要开发者提供，其中“**设备硬件配置信息**” 限制80字节，**非必填项**，其他参数只需要在我司开放平台注册即可获得。</p>
-</blockquote>
-<h4><a href="#2-启动认证" name="2-启动认证"></a>2、启动认证</h4>
-<p>根据步骤2中定义的heTCoreServiceManager实例对象，直接启动服务器。</p>
-<pre><code>//启动认证
-    ClifeOpenSDK.getInstance().startAuth(Activity, DevDataBean, new OnDataListener() {
-        @Override
-        public void onSucess(String msg) {
-            Logc.i(&quot;##clife.uu### 认证成功&quot;);
-        }
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="pragma" content="no-cache" />
+	<meta http-equiv="Cache-Control" content="no-cache" />
+	<meta charset="UTF-8">
+	<title>设备接入中心文档</title>
+	<meta name="generator" content="MediaWiki 1.17.0">
+	<link rel="stylesheet" href="static/02da6b362196e50cd396d4117c7fa3ea.css">
+	<meta name="keywords" content="设备接入中心">
+	<meta name="description" content="设备接入中心">
+	<meta name="ResourceLoaderDynamicStyles" content="设备接入中心">
+	<style>
+		.nav {
+			line-height: 66px;
+			font-size: 18px;
+			margin-top: -70px; 
+			margin-left: 320px;
+		}
+		.nav_item {
+			display: inline-block;
+			vertical-align: top;
+		}
+		.nav_item:first-child a {
+			padding-left: 46px;
+		}
+		.nav_item a {
+			filter: alpha(opacity = 60);
+			-moz-opacity: .6;
+			-khtml-opacity: .6;
+			opacity: .6;
+			font-size: 14px;
+			padding: 0 30px;
+			position: relative;
+			color: #222;
+		}
+	</style>
+</head>
+<body class="">
+	<!--网站头部-->
+	<script type="text/javascript" src="static/jquery-1.4.3.min.js"></script>
+	<script type="text/javascript" src="static/bff18ac75ffc4119cb2bef02c142e2ba.js"></script>
+	<div class="headWrap">
+		<div class="header" id="header">
+			<div class="inner">
+				<img src="./static/logo.png" style="width: 130px; height: 130px; margin-top: -35px;"/>
+				<a class="logo" href="" style="display: block;">
+					<h1 style="margin-top: -97px; margin-left: 135px;color: black">设备接入中心</h1>
+				</a>
+			</div>
+		</div>
+	</div>		
+	<!--[if IE 6]>
+	<style type="text/css">
+	html{background-image:url(about:blank);background-attachment:fixed;}
+	#content{overflow-x:hidden;}
+	.bottomnav{position:absolute;top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-30));}
+	</style>
+	<![endif]-->
+	<!--网站头部-->
+	<div class="mainwrapper">
+		<div class="inner">
+			<!-- panel -->
+			<div id="mw-panel" class="noprint">
 
-        @Override
-        public void onFailed(String err) {
-            System.err.println(&quot;##clife.uu### 认证失败&quot;);
-        }
-    });
-</code></pre>
-<h4><a href="#3-关闭服务" name="3-关闭服务"></a>3、关闭服务</h4>
-<pre><code>  ClifeOpenSDK.getInstance().stop();
-</code></pre>
-<blockquote>
-  <p>基本在结束程序的时候需要调用，其他情况不需要调用。</p>
-</blockquote>
-<h4><a href="#4-重置" name="4-重置"></a>4、重置</h4>
-<pre><code>  ClifeOpenSDK.getInstance().reset();
-</code></pre>
-<h4><a href="#5-设置心跳时间" name="5-设置心跳时间"></a>5、设置心跳时间</h4>
-<pre><code> ClifeOpenSDK.getInstance().setHeartBeat(1);//1秒
-</code></pre>
-<h3><a href="#上传故障数据" name="上传故障数据"></a>上传故障数据</h3>
-<pre><code>ClifeOpenSDK.getInstance().uploadWarm(Object, new OnDataListener() {
-            @Override
-            public void onSucess(String msg) {
-                Logc.i(&quot;##clife.uuu================&gt;uploadWarm.onSucess&quot; + msg);
-            }
+			   <!-- 公共模块2.0说明 -->
+				<div class="portal" style="margin-top: -1px;">
+					<h5><span class="portal_arrow"></span>2.0版本说明</h5>
+					<div class="body">
+						<ul>
+							<li><a href="./pages/2.0版本说明/使用方法.html" target="noprint">使用方法</a></li>
+							<li><a href="./pages/2.0版本说明/2.0版本介绍.html" target="noprint">2.0版本介绍</a></li>
+						</ul>
+					</div>
+				</div>
+				
 
-            @Override
-            public void onFailed(String err) {
-                Logc.i(&quot;##clife.uuu================&gt;uploadWarm.onFailed&quot;);
-            }
+				
+				<!-- start Android内置系统直连SDK -->
+				<div class="portal" style="margin-top: -1px;">
+					<h5><span class="portal_arrow"></span>测试用例</h5>
+					<div class="body">
+						<ul>
+							<li><a href="./pages/opensdk/直连SDK.html" target="noprint">直连SDK</a></li>
+						
+						</ul>
+					</div>
+				</div>
+				<!-- end Android内置系统直连SDK -->
 
-        });
-</code></pre>
-<blockquote>
-  <p>上传运行数据是由第三方开发者控制上传周期频率。</p>
-</blockquote>
-<h3><a href="#上传运行数据" name="上传运行数据"></a>上传运行数据</h3>
-<pre><code>ClifeOpenSDK.getInstance().uploadRun(Object, new OnDataListener() {
-            @Override
-            public void onSucess(String msg) {
-                Logc.i(&quot;##clife.uuu================&gt;onRunUpload.onSucess&quot; + msg);
-            }
 
-            @Override
-            public void onFailed(String err) {
-                Logc.i(&quot;##clife.uuu================&gt;onRunUpload.onFailed&quot;);
-            }
 
-        });
-</code></pre>
-<blockquote>
-  <p>上传运行数据是由第三方开发者控制上传周期频率。</p>
-</blockquote>
-<h3><a href="#上传控制数据" name="上传控制数据"></a>上传控制数据</h3>
-<pre><code>ClifeOpenSDK.getInstance().uploadConfig(Object, new OnDataListener() {
-            @Override
-            public void onSucess(String msg) {
-                Logc.i(&quot;##clife.uuu================&gt;onConfigUpload.onSucess&quot; + msg);
-            }
+				<div class="portal" style="margin-top: -1px;">
+					<h5><span class="portal_arrow"></span>校园项目</h5>
+					<div class="body">
+						<ul>
+							<h5><span class="portal_arrow"></span>声比可</h5>
+							<div class="body">
+								<ul>
+									<li><a href="./pages/opensdk/直连SDK.html" target="noprint">使用说明</a></li>
+								</ul>
+							</div>
 
-            @Override
-            public void onFailed(String err) {
-                Logc.i(&quot;##clife.uuu================&gt;onConfigUpload.onFailed&quot;);
-            }
-        });
-</code></pre>
-<blockquote>
-  <p>上传控制数据是由第三方开发者控制上传周期频率。</p>
-</blockquote>
-<h3><a href="#上传历史数据" name="上传历史数据"></a>上传历史数据</h3>
-<pre><code>public &lt;T&gt; void uploadHistoryByT(List&lt;T&gt; hiss, new OnDataListener() {
-            @Override
-            public void onSucess(String msg) {
-                Logc.i(&quot;##clife.uuu================&gt;onHistoryUpload.onSucess&quot;);
-            }
+							<h5><span class="portal_arrow"></span>考勤机</h5>
+							<div class="body">
+								<ul>
+									<li><a href="./pages/opensdk/直连SDK.html" target="noprint">使用说明</a></li>
+								</ul>
+							</div>
+						</ul>
+					</div>
+				</div>
 
-            @Override
-            public void onFailed(String err) {
-
-                Logc.i(&quot;##clife.uuu================&gt;onHistoryUpload.onFailed&quot;);
-            }
-        });
-</code></pre>
-<blockquote>
-  <p>上传历史数据，以内容形式上传非文件。</p>
-</blockquote>
-<h3><a href="#服务器下发控制数据" name="服务器下发控制数据"></a>服务器下发控制数据</h3>
-<h4><a href="#设备协议示例定义" name="设备协议示例定义"></a>设备协议示例定义</h4>
-<p>设备协议需要在Clife开放平台定义，然后终端接入根据协议定义如下类似数据结构</p>
-<pre><code>public class YuanDaDataModel implements Serializable {
-//    粉尘PM10以上  pm10 Integer 2字节
-private int pm10;
-//    粉尘经度  pmLng    Double   4字节
-private String pmLng;
-}
-</code></pre>
-<p>开发者需要注册数据更新监听，代码如下：</p>
-<pre><code>     ClifeOpenSDK.getInstance().setOnServerDataReceiver(new OnServerReceiver&lt;YuanDaDataModel&gt;() {
-        @Override
-        public short onReceive(YuanDaDataModel recv) {
-            Logc.i(&quot;##clife.uu### OnServerReceiver &quot; + recv.toString());
-            return 0;
-        }
-
-        @Override
-        public void onError(Throwable throwable) {
-        }
-    });
-</code></pre>
-<h3><a href="#状态判断" name="状态判断"></a>状态判断</h3>
-<p>发送数据前根据此状态判断<br/>返回true表示已就绪，返回false表示未就绪</p>
-<pre><code>ClifeOpenSDK.getInstance().isAuthed()
-</code></pre>
-<h3><a href="#历史数据上传规则" name="历史数据上传规则"></a>历史数据上传规则</h3>
-<p>历史数据模型</p>
-<pre><code>class HistoryModel{
-    String uploadTime;//使用，时间格式：yyyyMMddHHmmss
-    Object devBodyModel;
-}
-</code></pre>
-<p>将历史数据合并为list</p>
-<pre><code>int number = 100;
-List&lt;HistoryModel&lt;YuanDaDataModel&gt;&gt; list = new ArrayList&lt;&gt;();
-for (int i = 0; i &lt; number; i++){
-    list.add(new HistoryModel&lt;YuanDaDataModel&gt;(Utils.getCurrentTime(),historyModels()));
-}
-</code></pre>
-<p>历史数据上传规则，以上代码为例，历史数据有list.size=100条，步骤如下：</p>
-<ul>
-  <li>历史数据总条数：list.size = 100;</li>
-  <li>设备数据长度：devDataLen;</li>
-  <li>协议单包支持字节数：singlePacketMaxLen = 65525 - 5A.len;</li>
-</ul>
-<ol>
-  <li><code>body[0]=list.size</code>,如果<code>list.size&gt;255</code>，那么要分包；</li>
-  <li>如果<code>list.size * devDataLen &gt; singlePacketMaxLen</code>，则需要分包；</li>
-  <li>每一包的body字节数必须是16的整数倍，因为要保持字节对齐；</li>
-  <li>每一个devBody前面加上6字节时间戳（年月日时分秒）；</li>
-</ol>
-<h3><a href="#设置接收数据回调" name="设置接收数据回调"></a>设置接收数据回调</h3>
-<pre><code>ClifeOpenSDK.getInstance().setOnServerReceiver(new OnServerReceiver&lt;DeYiZaoBean&gt;() {
-        @Override
-        public PacketData onReceive(DeYiZaoBean data) {
-            //接收服务端下发的控制数据
-            return null;
-        }
-
-        @Override
-        public void onError(Throwable throwable) {
-        }
-    });
-</code></pre>
-<h4><a href="#针对接收数据回调的扩展使用" name="针对接收数据回调的扩展使用"></a>针对接收数据回调的扩展使用</h4>
-<ol>
-  <li>
-    <p>
-    <p>接收json数据</p></p>
-    <pre><code>ClifeOpenSDK.getInstance().setOnServerReceiver(new OnServerReceiver&lt;String&gt;() {
-    @Override
-    public PacketData onReceive(String data) {
-        //接收服务端下发的控制数据
-        return null;
-    }
-
-    @Override
-    public void onError(Throwable throwable) {
-    }
-});
-</code></pre>
-  </li>
-  <li>
-    <p>接收原始十六进制字节数据</p>
-    <pre><code>ClifeOpenSDK.getInstance().setOnServerReceiver(new OnServerReceiver&lt;RecvDataBean&gt;() {
-    @Override
-    public PacketData onReceive(RecvDataBean data) {
-        short cmd = data.getCmd();
-        if (cmd == 0x0103){
-            //处理自己的业务
-            //拿到服务器下发的数据，直接转String就是json
-            data.getBody();
-            //return 0x0203;//服务器下发了指令后，需要做回复，这个地方写0103的回复命令字0203
-            return new PacketData((short) 0x0203);
-        }
-        return null;
-    }
-
-    @Override
-    public void onError(Throwable throwable) {
-    }
-});
-</code></pre>
-  </li>
-</ol>
+				
+			<!-- SEARCH -->
+			</div>
+			<!-- /panel -->
+			<!-- content -->
+			<div id="content">
+				<!-- header -->
+				<iframe name="noprint" id="noprint" src="pages/opensdk/直连SDK.html" onload="Javascript:SetCwinHeight()" border="0" frameborder="0" scrolling="no" width="100%" height="1"></iframe>
+				<script type="text/javascript">
+				function SetCwinHeight(){
+					var iframeid=document.getElementById("noprint"); //iframe id
+					if (document.getElementById){
+						if (iframeid && !window.opera){
+							if (iframeid.contentDocument && iframeid.contentDocument.body.offsetHeight){
+								iframeid.height = iframeid.contentDocument.body.offsetHeight;
+							}else if(iframeid.Document && iframeid.Document.body.scrollHeight){
+								iframeid.height = iframeid.Document.body.scrollHeight;
+							}
+						}
+					}
+					window.scrollTo(0,0);
+				}			
+				
+				</script>	
+			</div>
+			<!-- /content -->
+		</div>
+	</div>
+	<!-- footer -->
+	<div class="foot" id="footer">
+		<ul class="links ft" id="footer-places">
+		</ul>
+		<p class="copyright"></p>
+	</div>
+	<!-- /footer -->
+	<!-- /fixalpha -->	
+	</body>
+</html>
